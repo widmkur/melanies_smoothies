@@ -1,0 +1,25 @@
+definition_version: 2
+entities:
+  streamlit_app:
+    type: streamlit
+    main_file: Custom Smoothie Order Form.py
+    query_warehouse: COMPUTE_WH
+    compute_pool: SYSTEM_COMPUTE_POOL_CPU
+    artifacts:
+      - pyproject.toml
+      - Custom Smoothie Order Form.py
+      - .streamlit/config.toml
+    identifier:
+      database: SMOOTHIES
+      schema: PUBLIC
+      name: UNTITLED_1
+    title: Custom Smoothie Order Form
+    run_mode: SpcsOnly
+    execute_as: OWNER
+    artifact_repositories:
+      - SNOWFLAKE.SNOWPARK.PYPI_SHARED_REPOSITORY
+    sharing:
+      - role: SYSADMIN
+        with_grant_option: true
+      - role: ACCOUNTADMIN
+        with_grant_option: true
