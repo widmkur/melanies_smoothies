@@ -46,5 +46,15 @@ if ingredients_list:
         st.success('Your Smoothie is ordered, ' + name_on_order, icon="✅")
 
 import requests
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
-st.text(smoothiefroot_response.json())
+
+try:
+    smoothiefroot_response = requests.get(
+        "https://my.smoothiefroot.com/api/fruit/watermelon",
+        timeout=10
+    )
+    if smoothiefroot_response.status_code == 200:
+        st.dataframe(data=smoothiefroot_response.json(), width="stretch")
+    else:
+        st.warning(f"Daten gerade nicht verfügbar (Status {smoothiefroot_response.status_code}).")
+except requests.exceptions.RequestException as e:
+    st.warning(f"Die Smoothiefroot-API ist aktuell nicht erreichbar: {e}")
