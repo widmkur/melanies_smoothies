@@ -3,6 +3,7 @@ import streamlit as st
 import os
 import requests
 from snowflake.snowpark.functions import col
+from urllib.parse import quote
 
 # Create a database connection to Snowflake
 cnx = st.connection("snowflake")
@@ -35,7 +36,7 @@ if ingredients_list:
         st.subheader(fruit_choosen + ' Nutrition Information')
         try:
             smoothiefroot_response = requests.get(
-                "https://my.smoothiefroot.com/api/fruit/watermelon",
+                "https://my.smoothiefroot.com/api/fruit/" + quote(fruit_choosen),
                 timeout=10
             )
             if smoothiefroot_response.status_code == 200:
