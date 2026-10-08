@@ -19,7 +19,7 @@ name_on_order = st.text_input("Name on Smoothie")
 st.write("The name of your Smoothie will be:", name_on_order)
 
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
-st.dataframe(data=my_dataframe, use_container_width=True)
+st.dataframe(data=my_dataframe, width="stretch")
 
 ingredients_list=st.multiselect(
     "Choose up to 5 ingredients:",
@@ -32,6 +32,7 @@ if ingredients_list:
     
     for fruit_choosen in ingredients_list:
         ingredients_string += fruit_choosen + ' '
+        st.subheader(fruit_choosen + 'Nutrition Information')
         try:
             smoothiefroot_response = requests.get(
                 "https://my.smoothiefroot.com/api/fruit/watermelon",
