@@ -4,7 +4,6 @@ import os
 import requests
 import pandas as pd
 from snowflake.snowpark.functions import col
-from urllib.parse import quote
 
 # Create a database connection to Snowflake
 cnx = st.connection("snowflake")
@@ -44,7 +43,7 @@ if ingredients_list:
         st.subheader(fruit_chosen + ' Nutrition Information')
         try:
             smoothiefroot_response = requests.get(
-                "https://my.smoothiefroot.com/api/fruit/" + quote(fruit_chosen),
+                f"https://my.smoothiefroot.com/api/fruit/{search_on}",
                 timeout=10
             )
             if smoothiefroot_response.status_code == 200:
