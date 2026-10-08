@@ -21,7 +21,7 @@ st.write("The name of your Smoothie will be:", name_on_order)
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
 st.dataframe(data=my_dataframe, use_container_width=True)
 
-ingredients_list = st.multiselect(
+ingredients_list=st.multiselect(
     "Choose up to 5 ingredients:",
     my_dataframe,
     max_selections=5
@@ -32,6 +32,17 @@ if ingredients_list:
     
     for fruit_choosen in ingredients_list:
         ingredients_string += fruit_choosen + ' '
+        try:
+            smoothiefroot_response = requests.get(
+                "https://my.smoothiefroot.com/api/fruit/watermelon",
+                timeout=10
+            )
+            if smoothiefroot_response.status_code == 200:
+                st.dataframe(data=smoothiefroot_response.json(), width="stretch")
+            else:
+                st.warning(f"Daten gerade nicht verfügbar (Status {smoothiefroot_response.status_code}).")
+        except requests.exceptions.RequestException as e:
+            st.warning(f"Die Smoothiefroot-API ist aktuell nicht erreichbar: {e}")
     
     #st.write(ingredients_string)
     
@@ -45,15 +56,3 @@ if ingredients_list:
     if time_to_insert:
         session.sql(my_insert_stmt).collect()
         st.success('Your Smoothie is ordered, ' + name_on_order, icon="✅")
-        
-        try:
-            smoothiefroot_response = requests.get(
-                "https://my.smoothiefroot.com/api/fruit/watermelon",
-                timeout=10
-            )
-            if smoothiefroot_response.status_code == 200:
-                st.dataframe(data=smoothiefroot_response.json(), width="stretch")
-            else:
-                st.warning(f"Daten gerade nicht verfügbar (Status {smoothiefroot_response.status_code}).")
-        except requests.exceptions.RequestException as e:
-            st.warning(f"Die Smoothiefroot-API ist aktuell nicht erreichbar: {e}")
